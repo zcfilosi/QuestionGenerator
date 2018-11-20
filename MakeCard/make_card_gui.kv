@@ -1,0 +1,23 @@
+# Reference make_card.py
+#: import main make_card
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+#: import ListItemButton kivy.uix.listview.ListItemButton
+
+<make_card_gui>:
+    orientation: "vertical"
+    front_text_input: front_text_input
+    back_text_input: back_text_input
+    padding: 10
+    spacing: 10
+
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            id: front_text_input
+            text: "Sample"
+        Button:
+            id: back_text_input
+            text: "Sample"
+        Button:
+            text: "Sample"

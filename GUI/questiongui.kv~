@@ -1,0 +1,120 @@
+# Reference gui.py
+#: import main gui
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+#: import ListItemButton kivy.uix.listview.ListItemButton
+
+
+<QuestionGui>:
+    orientation:'vertical'
+    text_input_text: txt_inpt
+    padding: 10
+    spacing: 10
+    card_list: cards_list_view
+    BoxLayout:
+        size_hint_y: None
+        height: "100dp"
+        Label:
+            text: "[color=00ffcd][b]{}[/b][/color]".format("Question Extraction")
+            font_size: "30sp"
+            markup: True
+    AnchorLayout:
+        size_hint_y: None
+        height: "200dp"
+        ancor_x: 'center'
+        spacing: 10
+        TextInput:
+            size_hint_y: None
+            size_hint_x: None	    
+            height: "200dp"
+            width: "400dp"
+            id: txt_inpt
+            multiline: True
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            text: "Select File"
+            size_hint_x: 15
+            on_release: root.show_load()
+        Button:
+            text: "Submit Data"
+            size_hint_x: 15
+            on_press: root.submit_data()
+        Button:
+            text: "Load Previous Data"
+            size_hint_x: 15
+            on_press: root.load_previous_data()
+        Button:
+            text: "Show Definition"
+            size_hint_x: 15
+            on_press: root.show_description()
+    BoxLayout:
+        size_hint_y: .1
+        Label:
+            text="Results"
+    ListView:
+        id: cards_list_view
+        size_hint_y: .4
+        adapter:
+            ListAdapter(data=[],cls=main.ListButton)
+<DefPopup>:
+    auto_dismiss: False
+    lbl : lbl
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        Label:
+            id: lbl
+            text: "<Default>"
+        Button:
+            text: 'Back To List'
+            on_release: root.cancel()
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            path: "~/"
+            #  filters: ['\*.]
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            path: "~/"
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Save"
+                on_release: root.save(filechooser.path, text_input.text)

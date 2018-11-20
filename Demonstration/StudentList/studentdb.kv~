@@ -1,0 +1,61 @@
+# Reference studentlist.py
+#: import main studentlist
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+#: import ListItemButton kivy.uix.listview.ListItemButton
+ 
+
+StudentDB:
+ 
+<StudentDB>:
+    orientation: "vertical"
+    first_name_text_input: first_name
+    last_name_text_input: last_name
+    students_list: students_list_view
+    padding: 10
+    spacing: 10
+    BoxLayout:
+        size_hint_y: None
+        height: "100dp"	
+        Label:
+            text: "[color=00ffcd][b]{}[/b][/color]".format("STUDENT LIST PROGRAM")
+            font_size: "20sp"
+            markup: True
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+ 
+        Label:
+            text: "First Name"
+        TextInput:
+            id: first_name
+            multiline: False
+        Label:
+            text: "Last Name"
+        TextInput:
+            id: last_name
+            multiline: False
+ 
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+        Button:
+            text: "Submit"
+            size_hint_x: 15
+            on_press: root.submit_student()
+        Button:
+            text: "Delete"
+            size_hint_x: 15
+            on_press: root.delete_student()
+        Button:
+            text: "Replace"
+            size_hint_x: 15
+            on_press: root.replace_student()
+        Button:
+            text: "Load Previous Data"
+            size_hint_x: 15
+            on_press: root.load_previous_data()
+ 		
+    ListView:
+        id: students_list_view
+        adapter:
+            ListAdapter(data=["Doug Smith"], cls=main.StudentListButton)

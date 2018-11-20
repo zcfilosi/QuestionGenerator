@@ -1,0 +1,5 @@
+import wikicards
+
+input_txt = "The scrum lord is the lord of the scrum, whilst the slum lord is the lord of the slums"
+
+funstuff = wikicards.cards_for_terms(input_txt)

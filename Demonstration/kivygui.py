@@ -1,0 +1,36 @@
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout  # grid layout for app
+from kivy.uix.boxlayout import BoxLayout  # Box layout
+from kivy.uix.textinput import TextInput  # text input field
+from kivy.uix.button import Button  # button
+from kivy.properties import ObjectProperty
+from kivy.uix.listview import ListItemButton
+
+
+class listButton(ListItemButton):
+    pass
+
+
+class listDB(BoxLayout):
+    pass
+
+
+class MainScreen(GridLayout):  # this is going to be the main screen
+
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+        self.cols = 2  # number of columns for grid layout
+        self.add_widget(Label(text='Input Text'))  # input text for QE
+        self.add_widget(TextInput(multiline=True))
+        self.add_widget(Button(text='Extract Question'))
+
+
+class QuestionExtraction(App):
+    def build(self):
+        return MainScreen()
+
+
+if __name__ == '__main__':
+
+    QuestionExtraction().run()

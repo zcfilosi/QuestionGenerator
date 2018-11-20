@@ -1,0 +1,146 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import ObjectProperty
+from kivy.uix.listview import ListItemButton
+from kivy.properties import StringProperty
+from kivy.properties import ListProperty
+from kivy.base import EventLoop
+from kivy.core.window import Window
+from kivy.uix.floatlayout import FloatLayout
+from kivy.factory import Factory
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+import nltk
+import csv
+import os
+import wikicards
+
+'''
+for changing starting root dir of filechooser - https://stackoverflow.com/questions/42505450/kivy-change-filechooser-defaul-location
+
+Below is the section responsible for the file chooser popup
+link for code https://kivy.org/doc/stable/api-kivy.uix.filechooser.html
+'''
+class LoadDialog(FloatLayout):
+    load = ObjectProperty(None)
+    cancel = ObjectProperty(None)
+
+class SaveDialog(FloatLayout):
+    save = ObjectProperty(None)
+    text_input = ObjectProperty(None)
+    cancel = ObjectProperty(None)
+
+
+class DefPopup(FloatLayout):
+    cancel = ObjectProperty(None)
+    lbl = ObjectProperty(None)
+
+
+    
+class ListButton(ListItemButton):
+    defstuff = ""
+ 
+ 
+class QuestionGui(BoxLayout):
+ 
+    # Connects the value in the TextInput widget to these
+    # fields
+    text_input_text = ObjectProperty()
+    popup_data = ObjectProperty()
+    loadfile = ObjectProperty(None)
+    text_input = ObjectProperty(None)
+    cancel = ObjectProperty(None)
+    card_list = ObjectProperty(None)
+    data_dict = {}
+    
+
+    def show_description(self, *args):
+        if self.card_list.adapter.selection:
+            selection = self.card_list.adapter.selection[0].text
+            self.silly_popup(selection)
+        
+    def description(self, data):
+        self.dismiss_popup()
+
+    def silly_popup(self, this_word):
+        pop = Popup(title=this_word, content=TextInput(text=str(self.data_dict[this_word]),size_hint=(.5,.5)),size_hint=(.5,.5))
+        pop.open()
+        
+    def dismiss_popup(self):
+        self._popup.dismiss()
+
+
+    def show_load(self):
+        content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+    
+    def show_save(self):
+        content = SaveDialog(save=self.save, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Save file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+
+    def load(self, path, filename):
+        with open(os.path.join(path, filename[0])) as stream:
+            self.text_input_text.text = ""
+            self.text_input_text.text = stream.read()
+
+        self.dismiss_popup()
+
+    def save(self, path, filename):
+        with open(os.path.join(path, filename), 'w') as stream:
+            stream.write(self.text_input.text)
+
+        self.dismiss_popup()
+    
+    def load_previous_data(self, *args):
+        pass
+
+ 
+    def submit_data(self, *args):
+        text_data = self.text_input_text.text
+        print("Text Data Recieved, processing. ")
+        self.text_input_text.text = ""
+        card_data = wikicards.cards_for_terms(text_data)
+        self.make_cards(card_data)
+        pass
+ 
+    def select_file(self, *args):
+        pass
+            
+    def make_cards(self, card_data):
+        
+        for card in card_data:
+            self.data_dict[card[0]] = card[1]
+            self.card_list.adapter.data.extend([card[0]])
+            self.card_list.adapter.defstuff = card[1]
+            self.card_list._trigger_reset_populate()
+            
+        
+
+Factory.register('QuestionGui', cls=QuestionGui)
+Factory.register('LoadDialog', cls=LoadDialog)
+Factory.register('SaveDialog', cls=SaveDialog)
+Factory.register('DefPopup', cls = DefPopup)
+
+            
+ 
+class QuestionGuiApp(App):
+
+    def build(self):
+        return QuestionGui()
+
+
+
+ 
+ 
+QuestionApp = QuestionGuiApp()
+ 
+QuestionApp.run()
+
+
+
+
