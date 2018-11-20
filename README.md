@@ -10,3 +10,6 @@ This is written for Python3 and utilizes the Kivy package for the GUI
 ## Required Packages
 Need to have python3 and python3-pip installed
 `pip3 install -r requirements.txt`
+
+Kivy Package Installation Instructions
+https://kivy.org/doc/stable/installation/installation-linux.html#dependencies-with-sdl2
