@@ -13,3 +13,5 @@ Need to have python3 and python3-pip installed
 
 Kivy Package Installation Instructions
 https://kivy.org/doc/stable/installation/installation-linux.html#dependencies-with-sdl2
+
+For first time use, in makecards.py, uncomment nltk downloads to allow nltk to download necessary functions
